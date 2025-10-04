@@ -14,27 +14,45 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            overflow: hidden;
+            /* allow vertical scrolling for the new scroller */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .presentation-container {
             width: 100vw;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
+            display: block;
+            /* make slides stack vertically and snap */
+            scroll-snap-type: y mandatory;
+            overflow-y: auto;
+        }
+
+        /* Custom scrollbar for modern browsers */
+        .presentation-container::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .presentation-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .presentation-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            border: 3px solid transparent;
+            background-clip: content-box;
         }
 
         .slide {
-            display: none;
+            display: flex;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             padding: 60px;
             animation: fadeIn 0.5s;
-        }
-
-        .slide.active {
-            display: flex;
-            flex-direction: column;
+            scroll-snap-align: start;
+            align-items: center;
             justify-content: center;
         }
 
@@ -360,6 +378,7 @@
         @media (max-width: 1024px) {
             .slide {
                 padding: 40px;
+                height: auto;
             }
 
             .slide-content {
@@ -1172,30 +1191,72 @@
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
+        // New scroll-based navigation for vertical scroller
+        const slides = Array.from(document.querySelectorAll('.slide'));
         const totalSlides = slides.length;
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        totalSlidesEl.textContent = totalSlides;
 
-        document.getElementById('totalSlides').textContent = totalSlides;
-
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        // Helper to scroll to a slide index
+        function scrollToSlide(index) {
+            const i = (index + totalSlides) % totalSlides;
+            slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        // Next/Previous used by buttons
         function nextSlide() {
-            showSlide(currentSlide + 1);
+            const visibleIndex = slides.findIndex(s => s.classList.contains('in-view'));
+            scrollToSlide(visibleIndex === -1 ? 0 : visibleIndex + 1);
         }
 
         function previousSlide() {
-            showSlide(currentSlide - 1);
+            const visibleIndex = slides.findIndex(s => s.classList.contains('in-view'));
+            scrollToSlide(visibleIndex === -1 ? 0 : visibleIndex - 1);
         }
 
+        // Update slide counter when slides intersect the viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    slides.forEach(s => s.classList.remove('in-view'));
+                    entry.target.classList.add('in-view');
+                    const idx = slides.indexOf(entry.target);
+                    currentSlideEl.textContent = idx + 1;
+                }
+            });
+        }, { root: null, threshold: 0.6 });
+
+        slides.forEach(s => observer.observe(s));
+
+        // Keyboard navigation: ArrowDown/ArrowUp for vertical scroll
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Expose functions for inline onclick handlers
+        window.nextSlide = nextSlide;
+        window.previousSlide = previousSlide;
+
+        // On load, ensure first slide is marked in-view
+        window.addEventListener('load', () => {
+            // If user loads with scroll not at top, find which slide is visible
+            const found = slides.find(s => s.getBoundingClientRect().top >= 0 && s.getBoundingClientRect().top < window.innerHeight);
+            if (found) {
+                slides.forEach(s => s.classList.remove('in-view'));
+                found.classList.add('in-view');
+                currentSlideEl.textContent = slides.indexOf(found) + 1;
+            } else {
+                slides[0].classList.add('in-view');
+                currentSlideEl.textContent = 1;
+            }
         });
     </script>
 </body>
