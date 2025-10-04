@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance Webinar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            animation: fadeIn 0.5s;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .gdg-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4285f4;
+        }
+
+        .gdg-logo {
+            font-size: 48px;
+        }
+
+        .gdg-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        h1 {
+            color: #1e3c72;
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        h2 {
+            color: #2a5298;
+            font-size: 36px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #4285f4;
+            font-size: 28px;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 22px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 12px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #4285f4;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .card li {
+            color: white;
+        }
+
+        .card li:before {
+            color: #ffd700;
+        }
+
+        .speaker-section {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .speaker-info {
+            flex: 1;
+        }
+
+        .speaker-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4285f4;
+        }
+
+        .year-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .year-card {
+            flex: 1;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .year-card h4 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        button {
+            background: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: #4285f4;
+            color: white;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #1e3c72;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-details {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            font-weight: 600;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .skill-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">Google Developer Group - SR University</div>
+                </div>
+                <h1>Exclusive Career Guidance from Industry Expert</h1>
+                <p class="subtitle">Shaping Tech Careers for CSE & ECE Students</p>
+                
+                <div class="speaker-section">
+                    <div class="speaker-info">
+                        <h2>Sanjay Viswanathan</h2>
+                        <ul style="font-size: 20px;">
+                            <li>Data Engineer | Ex-PM @ Google x Ping</li>
+                            <li>Google Explore ML Facilitator</li>
+                            <li>Expert in Data Engineering, Product Management & AI/ML</li>
+                            <li>Based in Sydney, Australia</li>
+                            <li>Passionate about mentoring students & shaping tech careers</li>
+                        </ul>
+                    </div>
+                    <div class="speaker-image">👨‍💼</div>
+                </div>
+
+                <div class="event-details">
+                    <div><span class="emoji">📅</span> 04-Oct-2025</div>
+                    <div><span class="emoji">⏰</span> 6:30 - 7:40 PM</div>
+                    <div><span class="emoji">💻</span> Google Meet (Online)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Speaker's Journey -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Expert's Personal Journey</h2>
+                <div class="highlight">
+                    <h3>Key Discussion Points</h3>
+                    <ul>
+                        <li>Where the journey began - student life and college background</li>
+                        <li>What inspired the career path choice in tech</li>
+                        <li>Early challenges faced and strategies to overcome them</li>
+                        <li>First opportunity/internship/job that changed everything</li>
+                        <li>Essential skills learned that shaped the career trajectory</li>
+                        <li>Current role in the industry and responsibilities</li>
+                    </ul>
+                </div>
+                <p style="font-size: 20px; color: #666; margin-top: 20px; font-style: italic;">
+                    "Real stories, real challenges, real success - Learn from someone who has walked the path you're about to embark on."
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Career Paths - CSE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Career Paths in Tech: CSE Students</h2>
+                <div class="content-grid">
+                    <div class="card">
+                        <h3>💻 Software Development</h3>
+                        <ul>
+                            <li>Full-Stack Engineering</li>
+                            <li>Frontend & Backend Development</li>
+                            <li>Mobile App Development</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>☁️ Cloud & DevOps</h3>
+                        <ul>
+                            <li>Cloud Computing (AWS, Azure, GCP)</li>
+                            <li>DevOps Engineering</li>
+                            <li>Site Reliability Engineering</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🔒 Cybersecurity</h3>
+                        <ul>
+                            <li>Ethical Hacking</li>
+                            <li>Security Analysis</li>
+                            <li>Penetration Testing</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🤖 AI & Data Science</h3>
+                        <ul>
+                            <li>Machine Learning Engineering</li>
+                            <li>Data Science & Analytics</li>
+                            <li>Product Management</li>
+                            <li>Startup Opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Career Paths - ECE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Career Paths in Tech: ECE Students</h2>
+                <div class="content-grid">
+                    <div class="card">
+                        <h3>🔬 VLSI & Chip Design</h3>
+                        <ul>
+                            <li>Semiconductor Design</li>
+                            <li>Digital Circuit Design</li>
+                            <li>Analog Circuit Design</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>⚙️ Embedded Systems</h3>
+                        <ul>
+                            <li>IoT Development</li>
+                            <li>Firmware Engineering</li>
+                            <li>Smart Devices</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🤖 Robotics & Automation</h3>
+                        <ul>
+                            <li>Industrial Automation</li>
+                            <li>Robotics Engineering</li>
+                            <li>Control Systems</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>📡 Hybrid Careers</h3>
+                        <ul>
+                            <li>Telecommunications & Networking</li>
+                            <li>AI + Hardware Integration</li>
+                            <li>Edge Computing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Essential Skills -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Essential Skills & Certifications</h2>
+                <h3>Programming Languages</h3>
+                <div class="skills-grid">
+                    <div class="skill-badge">Python</div>
+                    <div class="skill-badge">C++</div>
+                    <div class="skill-badge">Java</div>
+                    <div class="skill-badge">JavaScript</div>
+                    <div class="skill-badge">SQL</div>
+                    <div class="skill-badge">Go/Rust</div>
+                </div>
+
+                <h3>Top Certifications</h3>
+                <div class="content-grid">
+                    <div class="card">
+                        <h3>☁️ Cloud Platforms</h3>
+                        <ul>
+                            <li>Google Cloud Professional</li>
+                            <li>AWS Solutions Architect</li>
+                            <li>Azure Administrator</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🤖 AI/ML & Data</h3>
+                        <ul>
+                            <li>TensorFlow Developer</li>
+                            <li>Google AI Essentials</li>
+                            <li>Data Engineering</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="content-grid" style="margin-top: 15px;">
+                    <div class="card">
+                        <h3>🌐 Networking</h3>
+                        <ul>
+                            <li>Cisco CCNA</li>
+                            <li>Network Security</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🔒 Cybersecurity</h3>
+                        <ul>
+                            <li>CompTIA Security+</li>
+                            <li>Google Cybersecurity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Student Roadmap -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Your Roadmap to Success</h2>
+                <p class="subtitle">Year-wise Guidance for Students</p>
+                
+                <div class="year-timeline">
+                    <div class="year-card">
+                        <h4>📚 1st & 2nd Year</h4>
+                        <p>Build Strong Foundations</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Master fundamentals</li>
+                            <li>Daily coding practice</li>
+                            <li>Build projects</li>
+                            <li>Join hackathons</li>
+                        </ul>
+                    </div>
+                    <div class="year-card">
+                        <h4>💼 3rd Year</h4>
+                        <p>Gain Real Experience</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Pursue internships</li>
+                            <li>Get certified</li>
+                            <li>Open source contributions</li>
+                            <li>Network actively</li>
+                        </ul>
+                    </div>
+                    <div class="year-card">
+                        <h4>🎯 4th Year</h4>
+                        <p>Specialize & Launch</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Choose specialization</li>
+                            <li>Placement prep</li>
+                            <li>Explore startups/research</li>
+                            <li>Build portfolio</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight" style="margin-top: 30px;">
+                    <h3>💡 Pro Tips</h3>
+                    <ul>
+                        <li>Consistency beats intensity - Code every day, even if it's just 30 minutes</li>
+                        <li>Build projects that solve real problems</li>
+                        <li>Document your learning journey (blogs, GitHub)</li>
+                        <li>Network with peers and seniors in tech communities like GDG</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Industry Trends -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Industry Trends & Future Opportunities</h2>
+                
+                <div class="content-grid">
+                    <div class="card">
+                        <h3>🤖 AI-Driven Future</h3>
+                        <ul>
+                            <li>Generative AI Revolution</li>
+                            <li>AI in Electronics & Hardware</li>
+                            <li>LLMs and Foundation Models</li>
+                            <li>AI Ethics & Safety</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🌱 Green Tech</h3>
+                        <ul>
+                            <li>Sustainable Electronics</li>
+                            <li>Energy-Efficient Computing</li>
+                            <li>Climate Tech Solutions</li>
+                            <li>Renewable Energy Systems</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-grid" style="margin-top: 20px;">
+                    <div class="card">
+                        <h3>🚀 Startups & Entrepreneurship</h3>
+                        <ul>
+                            <li>Indian Startup Ecosystem Boom</li>
+                            <li>Product Development Skills</li>
+                            <li>Venture Building</li>
+                            <li>Tech Innovation</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🌍 Remote Work Era</h3>
+                        <ul>
+                            <li>Work from Anywhere</li>
+                            <li>Global Opportunities</li>
+                            <li>Freelancing Platforms</li>
+                            <li>Digital Nomad Lifestyle</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Q&A -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Interactive Q&A Session</h2>
+                <div class="highlight">
+                    <h3>🎤 Your Questions, Our Answers</h3>
+                    <p style="font-size: 22px; line-height: 1.8;">
+                        This is your opportunity to get personalized guidance! Ask about career paths, skills to focus on, internship strategies, work-life in tech, or share any concerns about your future in technology.
+                    </p>
+                </div>
+
+                <div class="content-grid" style="margin-top: 30px;">
+                    <div class="card">
+                        <h3>💬 Topics to Explore</h3>
+                        <ul>
+                            <li>Career transition strategies</li>
+                            <li>Skill development tips</li>
+                            <li>Interview preparation</li>
+                            <li>Industry insights</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🌟 Get Advice On</h3>
+                        <ul>
+                            <li>Choosing specializations</li>
+                            <li>Work experience abroad</li>
+                            <li>Building your portfolio</li>
+                            <li>Personal growth journey</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="text-align: center; font-size: 24px; color: #4285f4; margin-top: 30px; font-weight: 600;">
+                    "The only bad question is the one you don't ask!"
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Closing -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="gdg-header">
+                    <div class="gdg-logo">🔷🟢🔶🔴</div>
+                    <div class="gdg-text">GDG on Campus - SR University</div>
+                </div>
+                <h2>Thank You! 🙏</h2>
+                
+                <div class="highlight">
+                    <h3>Key Takeaways</h3>
+                    <ul style="font-size: 20px;">
+                        <li>Continuous learning is your superpower in tech</li>
+                        <li>Build genuine connections and network actively</li>
+                        <li>Stay curious and embrace challenges as opportunities</li>
+                        <li>Join communities like GDG to grow together</li>
+                        <li>Your journey is unique - own it with confidence</li>
+                    </ul>
+                </div>
+
+                <div class="event-details" style="margin-top: 30px;">
+                    <div><span class="emoji">📧</span> gdg@sru.edu.in</div>
+                    <div><span class="emoji">📱</span> 9392848259</div>
+                </div>
+
+                <p style="text-align: center; font-size: 28px; color: #1e3c72; margin-top: 40px; font-weight: 700;">
+                    Stay Connected. Keep Learning. Build Amazing Things! 🚀
+                </p>
+
+                <p style="text-align: center; font-size: 18px; color: #666; margin-top: 20px; font-style: italic;">
+                    Link will be shared in the GDG Community
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">9</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+    </script>
+</body>
+</html>
